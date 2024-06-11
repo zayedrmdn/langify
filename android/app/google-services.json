@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "123273200931",
+    "project_id": "langify-7088f",
+    "storage_bucket": "langify-7088f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123273200931:android:0972d23b9df6c86502f896",
+        "android_client_info": {
+          "package_name": "com.example.langify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkpyTg5N-gPV51FmRdxiDRznrPWdBZRb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
