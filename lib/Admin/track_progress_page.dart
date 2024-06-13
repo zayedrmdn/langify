@@ -1,76 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TrackProgressPage extends StatelessWidget {
+class TrackProgressPage extends StatefulWidget {
+  @override
+  _TrackProgressPageState createState() => _TrackProgressPageState();
+}
+
+class _TrackProgressPageState extends State<TrackProgressPage> {
+  final CollectionReference progressCollection = FirebaseFirestore.instance.collection('progress');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Track Progress'),
+        title: Text('Track Progress', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF132D46),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ProgressDiagram(
-              title: 'Learner Progress Over Time',
-              description: 'This diagram shows the progress of learners over a period of time.',
-            ),
-            SizedBox(height: 16.0),
-            ProgressDiagram(
-              title: 'Course Completion Rates',
-              description: 'This diagram displays the completion rates of various courses.',
-            ),
-            SizedBox(height: 16.0),
-            ProgressDiagram(
-              title: 'Quiz Performance',
-              description: 'This diagram illustrates the performance of learners in quizzes.',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+      body: StreamBuilder(
+        stream: progressCollection.snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-class ProgressDiagram extends StatelessWidget {
-  final String title;
-  final String description;
+          var progressData = snapshot.data!.docs;
 
-  ProgressDiagram({required this.title, required this.description});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Container(
-              height: 200,
-              color: Colors.grey[200],
-              child: Center(
-                child: Text(
-                  'Diagram Placeholder',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Text(description),
-          ],
-        ),
+          return ListView.builder(
+            itemCount: progressData.length,
+            itemBuilder: (context, index) {
+              var progress = progressData[index];
+              return ListTile(
+                title: Text(progress['user'], style: TextStyle(color: Color(0xFF191E29))),
+                subtitle: Text('Progress: ${progress['percentage']}%', style: TextStyle(color: Color(0xFF191E29))),
+              );
+            },
+          );
+        },
       ),
     );
   }

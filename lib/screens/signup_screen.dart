@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:langify/reusable_widgets/reusable_widget.dart';
 import 'package:langify/screens/home_screen.dart';
 import 'package:langify/utils/color_utils.dart';
@@ -14,6 +16,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
+  TextEditingController _dateTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .createUserWithEmailAndPassword(
                     email: _emailTextController.text,
                     password: _passwordTextController.text,
+                    date: _dateTextController.text,
                   )
                       .then((value) {
                     print("Created New Account");
