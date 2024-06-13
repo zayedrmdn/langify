@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:langify/Admin/admin_main.dart';
+import 'package:langify/Admin/Admin_main.dart';
 import 'package:langify/screens/signin_screen.dart';
 import 'package:langify/screens/chat_screen.dart'; // Import the ChatScreen
 
