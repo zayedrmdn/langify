@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:langify/Admin/Admin_main.dart';
 import 'package:langify/screens/signin_screen.dart';
 import 'package:langify/screens/chat_screen.dart'; // Import the ChatScreen
+import 'package:langify/Expert/Expert_main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,6 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => MainMenu()));
               },
             ),
+
+               ElevatedButton(
+              child: Text("Go to Expert main"),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ExpertMain()));
+              },
+            ),
+
 
             ElevatedButton(
               child: Text("Logout"),
