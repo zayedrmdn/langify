@@ -67,7 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .createUserWithEmailAndPassword(
                     email: _emailTextController.text,
                     password: _passwordTextController.text,
-                    //date: _dateTextController.text,
                   )
                       .then((value) {
                     print("Created New Account");
