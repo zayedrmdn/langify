@@ -35,17 +35,23 @@ class QuizPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Column(
+                              Expanded(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(doc['quizName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                                   SizedBox(height: 8),
+                                   if (doc['Image'] != null) // Check if imageUrl field exists
+                              Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
+                                  SizedBox(height: 8),
                                   Text(doc['quizDescription'], style: TextStyle(fontSize: 16)),
+                                  SizedBox(height: 8),
+                                  Text(doc['quizID'], style: TextStyle(fontSize: 14)),
                                 ],
-                              ),
-                              Icon(Icons.arrow_forward_ios, size: 16.0), // Arrow icon
+                              ),  
+                              )
                             ],
                           ),
                         ),
