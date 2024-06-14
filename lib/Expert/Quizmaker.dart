@@ -3,25 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:langify/Expert/Quiz.dart';
 
-void main() => runApp(QuizMakerApp(quizID: 'your_quiz_id_here'));
+void main() => runApp(QuizMakerApp(quizID: 'your_quiz_id_here', quizName: 'Your Quiz Name'));
 
 class QuizMakerApp extends StatelessWidget {
  final String quizID;
+ final String quizName; // Add quizName field
 
- QuizMakerApp({required this.quizID}); 
+ QuizMakerApp({required this.quizID, required this.quizName}); // Modify constructor to accept quizName
  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: QuizMaker(quizID: quizID),
+      home: QuizMaker(quizID: quizID, quizName: quizName), // Pass quizName to QuizMaker
     );
   }
 }
 
 class QuizMaker extends StatefulWidget {
-  final String quizID; // Add quizID field
+  final String quizID;
+  final String quizName; // Add quizName field
 
-  QuizMaker({required this.quizID}); // Constructor to accept quizID
+  QuizMaker({required this.quizID, required this.quizName}); // Modify constructor to accept quizName
 
   @override
   _QuizMakerState createState() => _QuizMakerState();
@@ -88,16 +90,23 @@ int _addQuestionPressCount = 0;
   if (questionsAndAnswers.isNotEmpty) {
     final firestore = FirebaseFirestore.instance;
     String quizID = widget.quizID;
+    String quizName = widget.quizName;
     try {
+      // Get a reference to the document with quizName inside the Quiz collection
+      DocumentReference quizDocRef = firestore.collection('Quiz').doc(quizName);
+      
       for (var qa in questionsAndAnswers) {
         var questionWithID = {...qa, 'quizID': quizID}; // Add quizID to each question
         print("Adding question: $questionWithID"); // Debug: Print question being added
-        await firestore.collection('Quiz Questions').add(questionWithID);
+        
+        // Add the question to the questions subcollection
+        await quizDocRef.collection('questions').add(questionWithID);
       }
+      
       questionsAndAnswers.clear(); // Clear the questions list after submission
-      print("All questions and answers saved successfully with quizID: $quizID");
+      print("All questions and answers saved successfully with quizID: $quizID and quizName: $quizName");
 
-       // Navigate to the QuizPage after successful submission
+      // Navigate to the QuizPage after successful submission
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => QuizPage()), // Replace QuizPage with your actual page class

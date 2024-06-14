@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:langify/Expert/Quizmaker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:math';
+import 'dart:io';
 
 class QuizMakerHome extends StatefulWidget {
   @override
@@ -13,7 +15,9 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
   final _formKey = GlobalKey<FormState>();
   final quizNameController = TextEditingController();
   final quizDescriptionController = TextEditingController();
-  XFile? _image;
+  File? _image; 
+  
+  
 
   @override
   void dispose() {
@@ -22,29 +26,50 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  Future getImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
     setState(() {
-      _image = image;
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
     });
   }
 
-  void _submitQuiz() {
+  Future<String?> uploadImage() async {
+    if (_image == null) return null;
+    String fileName = 'quiz_images/${DateTime.now().millisecondsSinceEpoch}';
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+
+    try {
+      await ref.putFile(_image!);
+      String downloadUrl = await ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error during file upload: $e');
+      return null;
+    }
+  }
+
+  void _submitQuiz() async {
     if (_formKey.currentState!.validate()) {
       final String quizName = quizNameController.text;
       final String quizDescription = quizDescriptionController.text;
       final String quizID = _generateRandomString(6);
+      String? imageUrl = await uploadImage(); // Upload the image and get the URL
 
-      FirebaseFirestore.instance.collection('Quiz').add({
+      await FirebaseFirestore.instance.collection('Quiz').doc(quizName).set({
         'quizName': quizName,
-        'quizDescription': quizDescription,
         'quizID': quizID,
+        'quizDescription': quizDescription,
+        'Image': imageUrl,
       }).then((value) {
         print("Quiz Added");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => QuizMaker(quizID: quizID)),
+          MaterialPageRoute(builder: (context) => QuizMaker(quizID: quizID,  quizName: quizName)),
         );
       }).catchError((error) => print("Failed to add quiz: $error"));
     }
@@ -79,26 +104,29 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
                   return null;
                 },
               ),
-              TextFormField(
+               TextFormField( // New TextFormField for quiz description
                 controller: quizDescriptionController,
                 decoration: InputDecoration(labelText: 'Quiz Description'),
-                maxLines: 5,
-                minLines: 3,
-                keyboardType: TextInputType.multiline,
+                 maxLines: 6,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the quiz description';
+                    return 'Please enter a quiz description';
                   }
                   return null;
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _pickImage,
-                child: Text('Upload Image'),
-              ),
+              if (_image != null) // Display the image if it's not null
+              Container(
+                height: 200, // Set a height for the image container
+                width: double.infinity,
+                child: Image.file(_image!, fit: BoxFit.cover),
+                 ),
               SizedBox(height: 20),
-              _image != null ? Text('Image Selected') : Text('No Image Selected'),
+              ElevatedButton(
+                onPressed: getImage, // Call the getImage function when the button is pressed
+                child: Text('Upload Image'),
+                 ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitQuiz,
