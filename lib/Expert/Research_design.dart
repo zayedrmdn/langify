@@ -13,7 +13,8 @@ class _DesignResearchState extends State<DesignResearch> {
   File? _image;
   final TextEditingController _topicController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _docUrlController = TextEditingController(); // Controller for document URL
+  final TextEditingController _docUrlController = TextEditingController(); 
+  DateTime submittedDate = DateTime.now();
 
   Future getImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -21,7 +22,6 @@ class _DesignResearchState extends State<DesignResearch> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-        uploadImage();
       } else {
         print('No image selected.');
       }
@@ -50,6 +50,7 @@ class _DesignResearchState extends State<DesignResearch> {
       'Description': _descriptionController.text,
       'Image': imageUrl,
       'DocumentURL': _docUrlController.text, 
+      'researchDate': submittedDate,
       }).then((value) {
     // Navigate back to the previous screen after successful submission
     Navigator.pop(context);
