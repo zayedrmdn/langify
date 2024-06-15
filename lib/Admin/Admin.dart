@@ -3,44 +3,52 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'UserDetailScreen.dart';
 
 class AdminScreen extends StatefulWidget {
+  const AdminScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AdminScreenState createState() => _AdminScreenState();
 }
 
 class _AdminScreenState extends State<AdminScreen> {
-  final CollectionReference adminsCollection = FirebaseFirestore.instance.collection('admins');
+  final CollectionReference accountsCollection =
+      FirebaseFirestore.instance.collection('Accounts');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF132D46),
+        title: const Text('Admin', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF132D46),
       ),
-      body: StreamBuilder(
-        stream: adminsCollection.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+      body: StreamBuilder<QuerySnapshot>(
+        stream: accountsCollection.snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
           }
 
-          var admins = snapshot.data!.docs;
+          final admins = snapshot.data?.docs ?? [];
 
           return ListView.builder(
             itemCount: admins.length,
             itemBuilder: (context, index) {
               var admin = admins[index];
               return ListTile(
-                title: Text(admin['name'], style: TextStyle(color: Color(0xFF191E29))),
+                title: Text(admin['Name'] ?? 'Unknown',
+                    style: const TextStyle(color: Color(0xFF191E29))),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => UserDetailScreen(
-                        name: admin['name'],
+                        name: admin['Name'] ?? 'Unknown',
                         role: 'Admin',
-                        subscribed: admin['subscribed'], // Pass subscription status
-                        backgroundColor: Color(0xFF191E29), // Dark background for Admins
+                        subscribed: admin['Status'] ?? false,
+                        backgroundColor: const Color(0xFF191E29),
                       ),
                     ),
                   );
@@ -51,20 +59,30 @@ class _AdminScreenState extends State<AdminScreen> {
                     TextButton(
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: admin['subscribed'] ? Color(0xFF696E79) : Color(0xFF01C38D),
+                        backgroundColor: (admin['Status'] ?? false)
+                            ? const Color(0xFF696E79)
+                            : const Color(0xFF01C38D),
                       ),
-                      child: Text(admin['subscribed'] ? 'Unsubscribe' : 'Subscribe'),
+                      child: Text((admin['Status'] ?? false)
+                          ? 'Unsubscribe'
+                          : 'Subscribe'),
                       onPressed: () {
-                        adminsCollection.doc(admin.id).update({'subscribed': !admin['subscribed']});
+                        accountsCollection
+                            .doc(admin.id)
+                            .update({'Status': !(admin['Status'] ?? false)});
                       },
                     ),
                     TextButton.icon(
-                      icon: Icon(Icons.edit, color: Color(0xFF132D46)),
-                      label: Text('Edit', style: TextStyle(color: Color(0xFF132D46))),
+                      icon: const Icon(Icons.edit, color: Color(0xFF132D46)),
+                      label: const Text('Edit',
+                          style: TextStyle(color: Color(0xFF132D46))),
                       onPressed: () async {
-                        String? editedName = await _editNameDialog(context, admin['name']);
+                        String? editedName = await _editNameDialog(
+                            context, admin['Name'] ?? 'Unknown');
                         if (editedName != null && editedName.isNotEmpty) {
-                          adminsCollection.doc(admin.id).update({'name': editedName});
+                          accountsCollection
+                              .doc(admin.id)
+                              .update({'Name': editedName});
                         }
                       },
                     ),
@@ -78,26 +96,34 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 
-  Future<String?> _editNameDialog(BuildContext context, String currentName) async {
-    TextEditingController nameController = TextEditingController(text: currentName);
+  Future<String?> _editNameDialog(
+      BuildContext context, String currentName) async {
+    TextEditingController _controller =
+        TextEditingController(text: currentName);
 
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Name'),
-          content: TextField(controller: nameController),
+          title: const Text('Edit Name',
+              style: TextStyle(color: Color(0xFF191E29))),
+          content: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(hintText: "Enter new name"),
+          ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel',
+                  style: TextStyle(color: Color(0xFF696E79))),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: const Text('Save',
+                  style: TextStyle(color: Color(0xFF132D46))),
               onPressed: () {
-                Navigator.pop(context, nameController.text);
+                Navigator.of(context).pop(_controller.text);
               },
             ),
           ],

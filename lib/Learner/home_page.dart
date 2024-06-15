@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 2;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    PuzzlePage(),
+    FirestoreDataDisplay(),
     LeaderboardPage(),
     HomeTab(),
     ForumsPage(),
