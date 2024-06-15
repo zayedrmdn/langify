@@ -4,6 +4,8 @@ import 'package:langify/Admin/Admin_main.dart';
 import 'package:langify/screens/signin_screen.dart';
 import 'package:langify/screens/chat_screen.dart'; // Import the ChatScreen
 import 'package:langify/Expert/Expert_main.dart';
+import 'package:langify/Admin/Admin.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text("Go to Admin Main"),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainMenu()));
+                    MaterialPageRoute(builder: (context) => AdminScreen()));
               },
             ),
 
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-
+           
             ElevatedButton(
               child: Text("Logout"),
               onPressed: () {
