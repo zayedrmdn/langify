@@ -16,7 +16,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
-  TextEditingController _dateTextController = TextEditingController();
+  //TextEditingController _dateTextController = TextEditingController();
   TextEditingController _userNameTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       .createUserWithEmailAndPassword(
                     email: _emailTextController.text,
                     password: _passwordTextController.text,
-                    //date: _dateTextController.text,
                   )
                       .then((value) {
                     print("Created New Account");
