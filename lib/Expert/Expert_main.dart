@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:langify/Expert/Research.dart';
 import 'package:langify/Expert/Quiz.dart';
+import 'package:langify/Expert/Courses.dart';
 
 class ExpertMain extends StatelessWidget {
   @override
@@ -15,7 +16,10 @@ class ExpertMain extends StatelessWidget {
           children: <Widget>[
             InkWell(
               onTap: () {
-                // Add your onTap code here for Course
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CoursesPage()),
+               );// Add your onTap code here for Course
               },
               child: Column(
                 children: <Widget>[

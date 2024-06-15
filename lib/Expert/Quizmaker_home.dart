@@ -15,6 +15,7 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
   final _formKey = GlobalKey<FormState>();
   final quizNameController = TextEditingController();
   final quizDescriptionController = TextEditingController();
+  final quizTagsController = TextEditingController();
   File? _image; 
   
   
@@ -23,6 +24,7 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
   void dispose() {
     quizNameController.dispose();
     quizDescriptionController.dispose();
+    quizTagsController.dispose();
     super.dispose();
   }
 
@@ -57,14 +59,18 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
     if (_formKey.currentState!.validate()) {
       final String quizName = quizNameController.text;
       final String quizDescription = quizDescriptionController.text;
+      final String quizTags = quizTagsController.text;
       final String quizID = _generateRandomString(6);
-      String? imageUrl = await uploadImage(); // Upload the image and get the URL
+      String? imageUrl = await uploadImage(); 
+      DateTime now = DateTime.now();
 
       await FirebaseFirestore.instance.collection('Quiz').doc(quizName).set({
         'quizName': quizName,
         'quizID': quizID,
         'quizDescription': quizDescription,
+        'quizTags': quizTags.split(',').map((tag) => tag.trim()).toList(),
         'Image': imageUrl,
+        'quizDate': now,
       }).then((value) {
         print("Quiz Added");
         Navigator.push(
@@ -114,6 +120,11 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
                   }
                   return null;
                 },
+              ),
+              SizedBox(height: 20),
+              TextFormField( // Added TextFormField for quiz tags
+                controller: quizTagsController,
+                decoration: InputDecoration(labelText: 'Quiz Tags (comma separated)'),
               ),
               SizedBox(height: 20),
               if (_image != null) // Display the image if it's not null

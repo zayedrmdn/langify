@@ -91,16 +91,22 @@ int _addQuestionPressCount = 0;
     final firestore = FirebaseFirestore.instance;
     String quizID = widget.quizID;
     String quizName = widget.quizName;
+     int questionCounter = 0;
+
     try {
       // Get a reference to the document with quizName inside the Quiz collection
       DocumentReference quizDocRef = firestore.collection('Quiz').doc(quizName);
       
       for (var qa in questionsAndAnswers) {
+        questionCounter++;
         var questionWithID = {...qa, 'quizID': quizID}; // Add quizID to each question
         print("Adding question: $questionWithID"); // Debug: Print question being added
         
-        // Add the question to the questions subcollection
-        await quizDocRef.collection('questions').add(questionWithID);
+        // Construct document name like "Question 1", "Question 2", etc.
+        String questionDocName = "Question $questionCounter";
+        
+        // Set the question data with a specific document name instead of a random ID
+        await quizDocRef.collection('questions').doc(questionDocName).set(questionWithID);
       }
       
       questionsAndAnswers.clear(); // Clear the questions list after submission
@@ -205,7 +211,7 @@ int _addQuestionPressCount = 0;
                   return null;
                 },
               ),
-              Text('Button pressed $_addQuestionPressCount times'),
+              Text('$_addQuestionPressCount Questions Added'),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ElevatedButton(

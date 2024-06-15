@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:langify/Expert/Quizmaker_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:langify/Expert/Coursemaker_home.dart';
 
-
-class QuizPage extends StatelessWidget {
+class CoursesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Page'),
+        title: Text('Courses Page'),
       ),
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('Quiz').snapshots(),
+              stream: FirebaseFirestore.instance.collection('Courses').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
                 return ListView.builder(
@@ -23,8 +22,7 @@ class QuizPage extends StatelessWidget {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
                     return InkWell(
                       onTap: () {
-                        
-                         print('Card tapped');
+                        print('Course card tapped');
                       },
                       child: Card(
                         elevation: 4,
@@ -38,29 +36,23 @@ class QuizPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(doc['quizName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 8),
-                                   if (doc['Image'] != null) // Check if imageUrl field exists
-                              Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
-                                  SizedBox(height: 8),
-                                  Text(doc['quizDescription'], style: TextStyle(fontSize: 16)),
-                                  SizedBox(height: 8),
-                               Wrap(
-                                     spacing: 8.0, // Gap between adjacent chips.
-                                     runSpacing: 4.0, // Gap between lines.
-                                    children: (doc['quizTags'] as List<dynamic>)
-                                    .map<Widget>((tag) => Chip(
-                                    label: Text(tag),
-                                    ))
-                                 .toList(),
-                                 ),
-                                  SizedBox(height: 8),
-                                  Text(doc['quizID'], style: TextStyle(fontSize: 14)),
-                                ],
-                              ),  
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(doc['courseName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 8),
+                                    if (doc['Image'] != null) // Check if imageUrl field exists
+                                      Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
+                                    SizedBox(height: 8),
+                                    Text(doc['courseDescription'], style: TextStyle(fontSize: 16)),
+                                    SizedBox(height: 8),
+                                    Text(doc['courseID'], style: TextStyle(fontSize: 14)),
+                                    SizedBox(height: 8),
+                                    Wrap(
+                                      children: List<Widget>.from(doc['courseTags'].map((tag) => Chip(label: Text(tag)))),
+                                    ),
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -77,7 +69,7 @@ class QuizPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => QuizMakerHome()),
+                  MaterialPageRoute(builder: (context) => CoursemakerHome()),
                 );
               },
               style: ElevatedButton.styleFrom(
@@ -85,7 +77,7 @@ class QuizPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Create a new quiz'),
+              child: Text('Create a new course'),
             ),
           ),
         ],
