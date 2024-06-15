@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'UserDetailScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LearnerScreen extends StatefulWidget {
   @override
@@ -8,7 +9,13 @@ class LearnerScreen extends StatefulWidget {
 }
 
 class _LearnerScreenState extends State<LearnerScreen> {
-  final CollectionReference learnersCollection = FirebaseFirestore.instance.collection('learners');
+  //final CollectionReference learnersCollection = FirebaseFirestore.instance.collection('learners');
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('Accounts')
+      .doc('4bpbSGwea1Kh9J0eG5Ex');
+
+  get learnersCollection => null; //temporarily added to remove error
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,8 @@ class _LearnerScreenState extends State<LearnerScreen> {
             itemBuilder: (context, index) {
               var learner = learners[index];
               return ListTile(
-                title: Text(learner['name'], style: TextStyle(color: Color(0xFF191E29))),
+                title: Text(learner['name'],
+                    style: TextStyle(color: Color(0xFF191E29))),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -51,20 +59,29 @@ class _LearnerScreenState extends State<LearnerScreen> {
                     TextButton(
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: learner['subscribed'] ? Color(0xFF696E79) : Color(0xFF01C38D),
+                        backgroundColor: learner['subscribed']
+                            ? Color(0xFF696E79)
+                            : Color(0xFF01C38D),
                       ),
-                      child: Text(learner['subscribed'] ? 'Unsubscribe' : 'Subscribe'),
+                      child: Text(
+                          learner['subscribed'] ? 'Unsubscribe' : 'Subscribe'),
                       onPressed: () {
-                        learnersCollection.doc(learner.id).update({'subscribed': !learner['subscribed']});
+                        learnersCollection
+                            .doc(learner.id)
+                            .update({'subscribed': !learner['subscribed']});
                       },
                     ),
                     TextButton.icon(
                       icon: Icon(Icons.edit, color: Color(0xFF132D46)),
-                      label: Text('Edit', style: TextStyle(color: Color(0xFF132D46))),
+                      label: Text('Edit',
+                          style: TextStyle(color: Color(0xFF132D46))),
                       onPressed: () async {
-                        String? editedName = await _editNameDialog(context, learner['name']);
+                        String? editedName =
+                            await _editNameDialog(context, learner['name']);
                         if (editedName != null && editedName.isNotEmpty) {
-                          learnersCollection.doc(learner.id).update({'name': editedName});
+                          learnersCollection
+                              .doc(learner.id)
+                              .update({'name': editedName});
                         }
                       },
                     ),
@@ -78,8 +95,10 @@ class _LearnerScreenState extends State<LearnerScreen> {
     );
   }
 
-  Future<String?> _editNameDialog(BuildContext context, String currentName) async {
-    TextEditingController nameController = TextEditingController(text: currentName);
+  Future<String?> _editNameDialog(
+      BuildContext context, String currentName) async {
+    TextEditingController nameController =
+        TextEditingController(text: currentName);
 
     return showDialog<String>(
       context: context,
