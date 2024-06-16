@@ -20,7 +20,9 @@ class _HomePageState extends State<HomePage> {
     PuzzleStart(),
     LeaderboardPage(),
     HomeTab(),
-    ForumsPage(),
+    ForumsPage(
+      currentUserID: 'Sepehr',
+    ),
     ProfilePage(),
   ];
 
