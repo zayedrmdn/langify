@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:langify/Admin/Admin.dart';
 import 'package:langify/Admin/Admin_main.dart';
 import 'package:langify/screens/signin_screen.dart';
 import 'package:langify/screens/chat_screen.dart'; // Import the ChatScreen
@@ -27,24 +28,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => ChatScreen()));
               },
             ),
-
-             ElevatedButton(
+            ElevatedButton(
               child: Text("Go to Admin Main"),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainMenu()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AdminScreen()));
               },
             ),
-
-               ElevatedButton(
+            ElevatedButton(
               child: Text("Go to Expert main"),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ExpertMain()));
               },
             ),
-
-
             ElevatedButton(
               child: Text("Logout"),
               onPressed: () {
