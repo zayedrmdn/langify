@@ -4,12 +4,12 @@ class CourseButton extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const CourseButton({super.key, required this.title, required this.onPressed});
+  const CourseButton({required this.title, required this.onPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       child: Text(title),
     );
   }
