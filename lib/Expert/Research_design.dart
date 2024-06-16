@@ -64,7 +64,7 @@ class _DesignResearchState extends State<DesignResearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Design Research'),
+        title: const Text('Design Research'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -72,34 +72,34 @@ class _DesignResearchState extends State<DesignResearch> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('CHOOSE TOPIC', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('CHOOSE TOPIC', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _topicController,
-                decoration: InputDecoration(hintText: 'Enter topic'),
+                decoration: const InputDecoration(hintText: 'Enter topic'),
               ),
-              SizedBox(height: 20),
-              Text('DESCRIPTION', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              const Text('DESCRIPTION', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(hintText: 'Enter description'),
+                decoration: const InputDecoration(hintText: 'Enter description'),
                 maxLines: 4,
               ),
-              SizedBox(height: 20),
-              Text('DOCUMENT URL', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              const Text('DOCUMENT URL', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _docUrlController,
-                decoration: InputDecoration(hintText: 'Enter document URL'),
+                decoration: const InputDecoration(hintText: 'Enter document URL'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: getImage,
-                  child: Text('Pick Image'),
+                  child: const Text('Pick Image'),
                 ),
               ),
-              SizedBox(height: 20),
-              _image == null ? Text('No image selected.') : Image.file(_image!),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+              _image == null ? const Text('No image selected.') : Image.file(_image!),
+              const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -109,7 +109,7 @@ class _DesignResearchState extends State<DesignResearch> {
                       submitData('');
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ),
             ],

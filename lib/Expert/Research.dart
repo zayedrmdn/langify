@@ -9,7 +9,7 @@ class Research extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: const Text('Home Page'),
          backgroundColor: hexStringToColor("696E79"),
          foregroundColor: Colors.white,
       ),
@@ -20,14 +20,14 @@ class Research extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('Research').snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData) return Center(child: const CircularProgressIndicator());
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
                     return Card(
                       elevation: 4,
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -37,13 +37,13 @@ class Research extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(doc['Topic'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                            SizedBox(height: 8),
-                            Text(doc['Description'], style: TextStyle(fontSize: 16, color: Colors.white)),
-                            SizedBox(height: 8),
+                            Text(doc['Topic'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                            const SizedBox(height: 8),
+                            Text(doc['Description'], style: const TextStyle(fontSize: 16, color: Colors.white)),
+                            const SizedBox(height: 8),
                             if (doc['Image'] != null) // Check if imageUrl field exists
                               Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             InkWell(
                               onTap: () async {
                                 var url = Uri.parse(doc['DocumentURL']);
@@ -51,7 +51,7 @@ class Research extends StatelessWidget {
                                   await launchUrl(url);
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                       content: Text('URL is invalid'),
                                     ),
                                   );
@@ -59,7 +59,7 @@ class Research extends StatelessWidget {
                               },
                               child: Text(
                                 doc['DocumentURL'],
-                                style: TextStyle(fontSize: 14, color: Colors.blue, decoration: TextDecoration.underline),
+                                style: const TextStyle(fontSize: 14, color: Colors.blue, decoration: TextDecoration.underline),
                               ),
                             ),
                           ],
@@ -86,7 +86,7 @@ class Research extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Design your research'),
+              child: const Text('Design your research'),
             ),
           ),
         ],
