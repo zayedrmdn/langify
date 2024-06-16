@@ -3,7 +3,7 @@ import 'package:langify/Learner/forums_page.dart';
 import 'package:langify/Learner/home_tab.dart';
 import 'package:langify/Learner/profile_page.dart'; // Import your ProfilePage
 import 'package:langify/Learner/leaderboard_page.dart';
-import 'package:langify/Learner/puzzle_start.dart';
+import 'package:langify/Learner/puzzle_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 2;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    PuzzleStart(),
+    PuzzlePage(),
     LeaderboardPage(),
     HomeTab(),
     ForumsPage(

@@ -36,8 +36,7 @@ class _PuzzleStartState extends State<PuzzleStart> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const FirestoreDataDisplay()),
+                  MaterialPageRoute(builder: (context) => const PuzzlePage()),
                 );
               },
             ),

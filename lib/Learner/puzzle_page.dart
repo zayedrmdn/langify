@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FirestoreDataDisplay extends StatefulWidget {
-  const FirestoreDataDisplay({super.key});
+class PuzzlePage extends StatefulWidget {
+  const PuzzlePage({super.key});
 
   @override
-  _FirestoreDataDisplayState createState() => _FirestoreDataDisplayState();
+  // ignore: library_private_types_in_public_api
+  _PuzzlePageState createState() => _PuzzlePageState();
 }
 
-class _FirestoreDataDisplayState extends State<FirestoreDataDisplay> {
+class _PuzzlePageState extends State<PuzzlePage> {
   List<Map<String, dynamic>> questions = [];
   int currentQuestionIndex = 0;
   int? selectedAnswerIndex;
