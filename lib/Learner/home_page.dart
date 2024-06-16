@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:langify/Learner/forums_page.dart';
 import 'package:langify/Learner/home_tab.dart';
 import 'profile_page.dart';
-import 'puzzle_page.dart';
 import 'leaderboard_page.dart';
 import 'puzzle_start.dart';
 

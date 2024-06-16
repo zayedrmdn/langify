@@ -24,11 +24,8 @@ class _FirestoreDataDisplayState extends State<FirestoreDataDisplay> {
 
   Future<void> fetchQuestions() async {
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('Quiz')
-        .doc('MathQuiz')
-        .collection('questions')
-        .get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('GermanQuiz').get();
 
       if (querySnapshot.docs.isNotEmpty) {
         setState(() {
