@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'UserDetailScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LearnerScreen extends StatefulWidget {
   @override
@@ -8,7 +9,13 @@ class LearnerScreen extends StatefulWidget {
 }
 
 class _LearnerScreenState extends State<LearnerScreen> {
-  final CollectionReference learnersCollection = FirebaseFirestore.instance.collection('Learner');
+  //final CollectionReference learnersCollection = FirebaseFirestore.instance.collection('learners');
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  DocumentReference docRef = FirebaseFirestore.instance
+      .collection('Accounts')
+      .doc('4bpbSGwea1Kh9J0eG5Ex');
+
+  get learnersCollection => null; //temporarily added to remove error
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +38,16 @@ class _LearnerScreenState extends State<LearnerScreen> {
             itemBuilder: (context, index) {
               var learner = learners[index];
               return ListTile(
-                title: Text(learner['Name'], style: TextStyle(color: Color(0xFF191E29))),
+                title: Text(learner['name'],
+                    style: TextStyle(color: Color(0xFF191E29))),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => UserDetailScreen(
-                        name: learner['Name'],
+                        name: learner['name'],
                         role: 'Learner',
-                        subscribed: learner['Status'],
+                        subscribed: learner['subscribed'],
                         backgroundColor: Color(0xFF191E29),
                       ),
                     ),
@@ -51,20 +59,29 @@ class _LearnerScreenState extends State<LearnerScreen> {
                     TextButton(
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: learner['Status'] ? Color(0xFF696E79) : Color(0xFF01C38D),
+                        backgroundColor: learner['subscribed']
+                            ? Color(0xFF696E79)
+                            : Color(0xFF01C38D),
                       ),
-                      child: Text(learner['Status'] ? 'Unsubscribe' : 'Subscribe'),
+                      child: Text(
+                          learner['subscribed'] ? 'Unsubscribe' : 'Subscribe'),
                       onPressed: () {
-                        learnersCollection.doc(learner.id).update({'Status': !learner['Status']});
+                        learnersCollection
+                            .doc(learner.id)
+                            .update({'subscribed': !learner['subscribed']});
                       },
                     ),
                     TextButton.icon(
                       icon: Icon(Icons.edit, color: Color(0xFF132D46)),
-                      label: Text('Edit', style: TextStyle(color: Color(0xFF132D46))),
+                      label: Text('Edit',
+                          style: TextStyle(color: Color(0xFF132D46))),
                       onPressed: () async {
-                        String? editedName = await _editNameDialog(context, learner['Name']);
+                        String? editedName =
+                            await _editNameDialog(context, learner['name']);
                         if (editedName != null && editedName.isNotEmpty) {
-                          learnersCollection.doc(learner.id).update({'Name': editedName});
+                          learnersCollection
+                              .doc(learner.id)
+                              .update({'name': editedName});
                         }
                       },
                     ),
@@ -78,18 +95,20 @@ class _LearnerScreenState extends State<LearnerScreen> {
     );
   }
 
-  Future<String?> _editNameDialog(BuildContext context, String currentName) async {
-    TextEditingController nameController = TextEditingController(text: currentName);
+  Future<String?> _editNameDialog(
+      BuildContext context, String currentName) async {
+    TextEditingController nameController =
+        TextEditingController(text: currentName);
 
     return showDialog<String>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Name'),
+          title: const Text('Edit Name'),
           content: TextField(controller: nameController),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -106,4 +125,3 @@ class _LearnerScreenState extends State<LearnerScreen> {
     );
   }
 }
-
