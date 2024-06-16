@@ -20,13 +20,13 @@ class TrackProgressPage extends StatelessWidget {
             SizedBox(height: 16.0),
             ProgressDiagram(
               title: 'Course Completion Rates',
-              description: 'This diagram displays the completion rates of various languages.',
+              description: 'https://blog.duolingo.com/how-well-does-duolingo-teach-speaking-skills',
               imagePath: 'assets/images/cRate.jpg', 
             ),
             SizedBox(height: 16.0),
             ProgressDiagram(
               title: 'Quiz Performance',
-              description: 'This diagram illustrates the performance of learners in quizzes.',
+              description: 'https://blog.duolingo.com/how-does-duolingo-measure-learning',
               imagePath: 'assets/images/Quiz.jpg', 
             ),
           ],
