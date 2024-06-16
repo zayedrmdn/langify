@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:langify/Expert/Research_design.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:langify/utils/color_utils.dart';
 
 class Research extends StatelessWidget {
   @override
@@ -9,7 +10,10 @@ class Research extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
+         backgroundColor: hexStringToColor("696E79"),
+         foregroundColor: Colors.white,
       ),
+       backgroundColor: hexStringToColor("696E79"),
       body: Column(
         children: [
           Expanded(
@@ -27,14 +31,15 @@ class Research extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      color: hexStringToColor("132D46"),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(doc['Topic'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                            Text(doc['Topic'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                             SizedBox(height: 8),
-                            Text(doc['Description'], style: TextStyle(fontSize: 16)),
+                            Text(doc['Description'], style: TextStyle(fontSize: 16, color: Colors.white)),
                             SizedBox(height: 8),
                             if (doc['Image'] != null) // Check if imageUrl field exists
                               Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
@@ -75,6 +80,8 @@ class Research extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
+                backgroundColor: hexStringToColor("132D46"), // Background color of the button
+                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

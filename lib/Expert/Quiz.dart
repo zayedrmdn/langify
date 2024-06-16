@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:langify/Expert/Quizmaker_home.dart';
+import 'package:langify/utils/color_utils.dart';
 
 
 class QuizPage extends StatelessWidget {
@@ -9,7 +10,10 @@ class QuizPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quiz Page'),
+         backgroundColor: hexStringToColor("696E79"),
+         foregroundColor: Colors.white,
       ),
+       backgroundColor: hexStringToColor("696E79"),
       body: Column(
         children: [
           Expanded(
@@ -32,6 +36,7 @@ class QuizPage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        color: hexStringToColor("132D46"),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
@@ -41,12 +46,12 @@ class QuizPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(doc['quizName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                  Text(doc['quizName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
                                   SizedBox(height: 8),
                                    if (doc['Image'] != null) // Check if imageUrl field exists
                               Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
                                   SizedBox(height: 8),
-                                  Text(doc['quizDescription'], style: TextStyle(fontSize: 16)),
+                                  Text(doc['quizDescription'], style: TextStyle(fontSize: 16, color: Colors.white)),
                                   SizedBox(height: 8),
                                Wrap(
                                      spacing: 8.0, // Gap between adjacent chips.
@@ -58,7 +63,7 @@ class QuizPage extends StatelessWidget {
                                  .toList(),
                                  ),
                                   SizedBox(height: 8),
-                                  Text(doc['quizID'], style: TextStyle(fontSize: 14)),
+                                  Text(doc['quizID'], style: TextStyle(fontSize: 14, color: Colors.white)),
                                 ],
                               ),  
                               )
@@ -81,6 +86,8 @@ class QuizPage extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
+                 backgroundColor: hexStringToColor("132D46"), // Background color of the button
+                  foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
