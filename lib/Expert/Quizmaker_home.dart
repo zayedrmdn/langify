@@ -77,7 +77,10 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
           context,
           MaterialPageRoute(builder: (context) => QuizMaker(quizID: quizID,  quizName: quizName)),
         );
-      }).catchError((error) => print("Failed to add quiz: $error"));
+      }).catchError((error) {
+        print("Failed to add quiz: $error");
+        return Future<Null>.value(null);
+      });
     }
   }
 
@@ -92,17 +95,17 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Maker Home'),
+        title: const Text('Quiz Maker Home'),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
               TextFormField(
                 controller: quizNameController,
-                decoration: InputDecoration(labelText: 'Quiz Name'),
+                decoration: const InputDecoration(labelText: 'Quiz Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the quiz name';
@@ -112,7 +115,7 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
               ),
                TextFormField( // New TextFormField for quiz description
                 controller: quizDescriptionController,
-                decoration: InputDecoration(labelText: 'Quiz Description'),
+                decoration: const InputDecoration(labelText: 'Quiz Description'),
                  maxLines: 6,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -121,27 +124,27 @@ class _QuizMakerHomeState extends State<QuizMakerHome> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField( // Added TextFormField for quiz tags
                 controller: quizTagsController,
-                decoration: InputDecoration(labelText: 'Quiz Tags (comma separated)'),
+                decoration: const InputDecoration(labelText: 'Quiz Tags (comma separated)'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (_image != null) // Display the image if it's not null
               Container(
                 height: 200, // Set a height for the image container
                 width: double.infinity,
                 child: Image.file(_image!, fit: BoxFit.cover),
                  ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: getImage, // Call the getImage function when the button is pressed
-                child: Text('Upload Image'),
+                child: const Text('Upload Image'),
                  ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitQuiz,
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

@@ -3,15 +3,49 @@ import 'package:langify/Expert/Research.dart';
 import 'package:langify/Expert/Quiz.dart';
 import 'package:langify/Expert/Courses.dart';
 import 'package:langify/utils/color_utils.dart';
+import 'package:langify/screens/translator_screen.dart';
+import 'package:langify/Expert/Expert_Profile.dart';
+import 'package:langify/screens/chat_screen.dart';
 
 class ExpertMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expert Main'),
+        title: const Text('Expert Main'),
         backgroundColor: hexStringToColor("696E79"),
         foregroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.translate), // Use any icon that suits your needs
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TranslatorScreen()),
+                // Assuming TranslatorScreen is the target page
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.account_circle), // Icon for the profile page
+            onPressed: () {
+              // Navigate to the ProfilePage
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ExpertProfilePage ()), // Assuming ProfilePage is the target page
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.message), // Icon for the messaging section
+            onPressed: () {
+             Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChatScreen()), // Assuming MessagingPage is the target page
+    );
+  },
+),
+        ],
       ),
       body: Center(
         child: Column(
@@ -22,13 +56,13 @@ class ExpertMain extends StatelessWidget {
               label: 'Course',
               page: CoursesPage(),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ExpertButton(
               imagePath: 'assets/images/Quiz.jpg',
               label: 'Competition',
               page: QuizPage(),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ExpertButton(
               imagePath: 'assets/images/Research.png',
               label: 'Collaborative Research',
@@ -68,7 +102,7 @@ class ExpertButton extends StatelessWidget {
           },
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.zero, // Ensure no extra padding inside the button
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero, // Maintain the specified shape
             ),
             minimumSize: Size(230, 200), // Specify the button's size
@@ -84,10 +118,10 @@ class ExpertButton extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 8), // Add space between the image and the text
+        const SizedBox(height: 8), // Add space between the image and the text
         Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white), // Make the text bold,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white), // Make the text bold,
           ),
       ],
     );

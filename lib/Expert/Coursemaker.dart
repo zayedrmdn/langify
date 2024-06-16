@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:langify/Expert/Courses.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -127,17 +128,17 @@ class _CourseMakerState extends State<CourseMaker> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Unit'),
+        title: const Text('Add Unit'),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
               TextFormField(
                 controller: unitNameController,
-                decoration: InputDecoration(labelText: 'Enter unit name'),
+                decoration: const InputDecoration(labelText: 'Enter unit name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a unit name';
@@ -147,7 +148,7 @@ class _CourseMakerState extends State<CourseMaker> {
               ),
               TextFormField(
                 controller: unitDescriptionController,
-                decoration: InputDecoration(labelText: 'Unit Description'),
+                decoration: const InputDecoration(labelText: 'Unit Description'),
                 maxLines: 5,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -159,13 +160,13 @@ class _CourseMakerState extends State<CourseMaker> {
               if (showContentField)
                 TextFormField(
                   controller: contentController,
-                  decoration: InputDecoration(labelText: 'Content'),
+                  decoration: const InputDecoration(labelText: 'Content'),
                   maxLines: 3,
                 ),
               if (showUrlField)
                 TextFormField(
                   controller: urlController,
-                  decoration: InputDecoration(labelText: 'URL'),
+                  decoration: const InputDecoration(labelText: 'URL'),
                 ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -178,7 +179,7 @@ class _CourseMakerState extends State<CourseMaker> {
                           showContentField = true;
                         });
                       },
-                      child: Text('Content'),
+                      child: const Text('Content'),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -186,23 +187,35 @@ class _CourseMakerState extends State<CourseMaker> {
                           showUrlField = true;
                         });
                       },
-                      child: Text('Links'),
+                      child: const Text('Links'),
                     ),
                     ElevatedButton(
                       onPressed: getImage,
-                      child: Text('Image'),
+                      child: const Text('Image'),
                     ),
                   ],
                 ),
               ),
               if (_image != null) Image.file(_image!), // Correctly moved outside of ElevatedButton
+             Padding(
+                 padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ElevatedButton(
+                   onPressed: _submitUnit,
+                   child: const Text('Submit Unit'),
+                   ),
+                     ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ElevatedButton(
-                  onPressed: _submitUnit,
-                  child: Text('Submit Unit'),
-                ),
-              ),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton(
+                     onPressed: () {
+                        Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => CoursesPage ()), // Assuming CoursePage is the target page
+                              );
+                                },
+                         child: const Text('Return'),
+                         ),
+             ),
             ],
           ),
         ),
