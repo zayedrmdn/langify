@@ -5,7 +5,7 @@ import 'messages_page.dart';
 class ChatsTab extends StatelessWidget {
   final String currentUserID;
 
-  const ChatsTab({required this.currentUserID, Key? key}) : super(key: key);
+  const ChatsTab({required this.currentUserID, super.key});
 
   @override
   Widget build(BuildContext context) {

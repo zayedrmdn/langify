@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:langify/Learner/forums_page.dart';
 import 'package:langify/Learner/home_tab.dart';
-import 'profile_page.dart';
-import 'leaderboard_page.dart';
-import 'puzzle_start.dart';
+import 'package:langify/Learner/profile_page.dart'; // Import your ProfilePage
+import 'package:langify/Learner/leaderboard_page.dart';
+import 'package:langify/Learner/puzzle_start.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,9 +21,11 @@ class _HomePageState extends State<HomePage> {
     LeaderboardPage(),
     HomeTab(),
     ForumsPage(
-      currentUserID: 'Sepehr',
+      currentUserID: 'Zayed', // This should be replaced with the actual user ID
     ),
-    ProfilePage(),
+    ProfilePage(
+      currentUserID: 'Zayed', // Pass the currentUserID here
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -37,6 +39,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Learner Home'),
+        backgroundColor: Colors.green,
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
