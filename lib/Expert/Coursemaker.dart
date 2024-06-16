@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:langify/Expert/Courses.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -196,13 +197,25 @@ class _CourseMakerState extends State<CourseMaker> {
                 ),
               ),
               if (_image != null) Image.file(_image!), // Correctly moved outside of ElevatedButton
+             Padding(
+                 padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ElevatedButton(
+                   onPressed: _submitUnit,
+                   child: Text('Submit Unit'),
+                   ),
+                     ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ElevatedButton(
-                  onPressed: _submitUnit,
-                  child: Text('Submit Unit'),
-                ),
-              ),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton(
+                     onPressed: () {
+                        Navigator.pushReplacement(
+                           context,
+                           MaterialPageRoute(builder: (context) => CoursesPage ()), // Assuming CoursePage is the target page
+                              );
+                                },
+                         child: Text('Return'),
+                         ),
+             ),
             ],
           ),
         ),

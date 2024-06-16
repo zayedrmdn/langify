@@ -35,7 +35,7 @@ class CourseDetailPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        UnitListPage(courseID: course['courseID']),
+                        UnitListPage(courseName: course['courseName']),
                   ),
                 );
               },
