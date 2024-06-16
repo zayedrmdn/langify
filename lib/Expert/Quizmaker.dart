@@ -1,4 +1,4 @@
-import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:langify/Expert/Quiz.dart';
@@ -31,7 +31,7 @@ class QuizMaker extends StatefulWidget {
 
 class _QuizMakerState extends State<QuizMaker> {
   final _formKey = GlobalKey<FormState>();
-  List<Map<String, dynamic>> questionsAndAnswers = [];
+ Map<String, Map<String, dynamic>> questionsAndAnswers = {};
 
   TextEditingController questionController = TextEditingController();
   TextEditingController answer1Controller = TextEditingController();
@@ -53,36 +53,29 @@ class _QuizMakerState extends State<QuizMaker> {
 
 int _addQuestionPressCount = 0;
 
-  void _addQuestion() {
-  print("Attempting to add question"); // Debug: Check if method is called
+ void _addQuestion() {
   if (_formKey.currentState!.validate()) {
-    print("Form is valid"); // Debug: Check if form validation passes
-    questionsAndAnswers.add({
-      'question': questionController.text,
-      'answers': [
-        answer1Controller.text,
-        answer2Controller.text,
-        answer3Controller.text,
-        answer4Controller.text,
-      ],
-      'correctAnswer': 0,
-      'score': int.tryParse(scoreController.text) ?? 0,
-    });
+    String correctAnswer = "C1"; // Assuming the correct answer is always the first option provided
+
+    questionsAndAnswers[questionController.text] = {
+      'Options': {
+        'C1': answer1Controller.text,
+        'C2': answer2Controller.text,
+        'C3': answer3Controller.text,
+      },
+      'CorrectAns': correctAnswer,
+      'Score': int.tryParse(scoreController.text) ?? 0,
+    };
 
     questionController.clear();
     answer1Controller.clear();
     answer2Controller.clear();
     answer3Controller.clear();
-    answer4Controller.clear();
     scoreController.clear();
 
     _addQuestionPressCount++;
 
     setState(() {}); // Ensure UI is refreshed
-
-    print("Question added. Total questions: ${questionsAndAnswers.length}");
-  } else {
-    print("Form is invalid"); // Debug: Form validation failed
   }
 }
 
@@ -97,13 +90,13 @@ int _addQuestionPressCount = 0;
       // Get a reference to the document with quizName inside the Quiz collection
       DocumentReference quizDocRef = firestore.collection('Quiz').doc(quizName);
       
-      for (var qa in questionsAndAnswers) {
-        questionCounter++;
-        var questionWithID = {...qa, 'quizID': quizID}; // Add quizID to each question
-        print("Adding question: $questionWithID"); // Debug: Print question being added
+       for (var entry in questionsAndAnswers.entries) {
+       questionCounter++;
+       var questionWithID = {'Question': entry.key, ...entry.value, 'quizID': quizID}; // Combine question text with its details and add quizID
+       print("Adding question: $questionWithID");// Debug: Print question being added
         
-        // Construct document name like "Question 1", "Question 2", etc.
-        String questionDocName = "Question $questionCounter";
+        // Construct document name like "Q1", "Q2", etc.
+        String questionDocName = "Q$questionCounter";
         
         // Set the question data with a specific document name instead of a random ID
         await quizDocRef.collection('questions').doc(questionDocName).set(questionWithID);
@@ -125,14 +118,7 @@ int _addQuestionPressCount = 0;
   }
 }
 
-  // Function to generate a random 6-letter string
-  String _generateRandomString(int length) {
-    const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    Random _rnd = Random();
-    return String.fromCharCodes(Iterable.generate(
-        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -185,16 +171,6 @@ int _addQuestionPressCount = 0;
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter answer 3';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: answer4Controller,
-                decoration: InputDecoration(labelText: 'Answer 4'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter answer 4';
                   }
                   return null;
                 },

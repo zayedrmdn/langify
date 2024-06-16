@@ -33,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               child: Text("Go to Admin Main"),
               onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AdminScreen()));
                 Navigator.push(
                     context,
                     MaterialPageRoute(
