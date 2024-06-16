@@ -6,6 +6,7 @@ import 'package:langify/screens/signin_screen.dart';
 import 'package:langify/screens/chat_screen.dart'; // Import the ChatScreen
 import 'package:langify/Expert/Expert_main.dart';
 import 'package:langify/Admin/Admin.dart';
+import 'package:langify/screens/translator_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -48,6 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(builder: (context) => ExpertMain()));
               },
             ),
+
+               ElevatedButton(
+              child: Text("Go Translator"),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TranslatorScreen ()));
+              },
+            ), 
+
             ElevatedButton(
               child: Text("Logout"),
               onPressed: () {
