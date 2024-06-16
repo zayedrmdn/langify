@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'podcast_detail_page.dart';
 
 class PodcastPage extends StatefulWidget {
   @override
@@ -7,36 +7,51 @@ class PodcastPage extends StatefulWidget {
 }
 
 class _PodcastPageState extends State<PodcastPage> {
-  final CollectionReference podcastsCollection = FirebaseFirestore.instance.collection('podcasts');
+  List<String> podcasts = [
+    'Podcast 1',
+    'Podcast 2',
+    'Podcast 3',
+    'Podcast 4',
+    'Podcast 5',
+  ];
+
+  void removePodcast(int index) {
+    setState(() {
+      podcasts.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Podcast', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF132D46),
+        title: Text('Podcast Content', style: TextStyle(color: Color(0xFF191E29))),
+        backgroundColor: Color(0xFF01C38D),
       ),
-      body: StreamBuilder(
-        stream: podcastsCollection.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          var podcasts = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: podcasts.length,
-            itemBuilder: (context, index) {
-              var podcast = podcasts[index];
-              return ListTile(
-                title: Text(podcast['title'], style: TextStyle(color: Color(0xFF191E29))),
-                subtitle: Text('URL: ${podcast['url']}', style: TextStyle(color: Color(0xFF191E29))),
-              );
-            },
-          );
-        },
+      body: Container(
+        color: Color(0xFF132D46),
+        child: ListView.builder(
+          itemCount: podcasts.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(podcasts[index], style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PodcastDetailPage(
+                      podcast: podcasts[index],
+                      onRemove: () => removePodcast(index),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
 }
+
+
