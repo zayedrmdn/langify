@@ -75,7 +75,10 @@ class _CoursemakerHomeState extends State<CoursemakerHome> {
           context,
           MaterialPageRoute(builder: (context) => CourseMakerApp(courseID: courseID, courseName: courseName)),
         );
-      }).catchError((error) => print("Failed to add course: $error"));
+      }).catchError((error) {
+        print("Failed to add course: $error");
+        return Future<Null>.value(null);
+      });
     }
   }
 
@@ -90,17 +93,17 @@ class _CoursemakerHomeState extends State<CoursemakerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Course Maker Home'),
+        title: const Text('Course Maker Home'),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
               TextFormField(
                 controller: courseNameController,
-                decoration: InputDecoration(labelText: 'Course Name'),
+                decoration: const InputDecoration(labelText: 'Course Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the course name';
@@ -110,7 +113,7 @@ class _CoursemakerHomeState extends State<CoursemakerHome> {
               ),
               TextFormField(
                 controller: courseDescriptionController,
-                decoration: InputDecoration(labelText: 'Course Description'),
+                decoration: const InputDecoration(labelText: 'Course Description'),
                 maxLines: 6,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -121,7 +124,7 @@ class _CoursemakerHomeState extends State<CoursemakerHome> {
               ),
               TextFormField(
                 controller: courseTagsController,
-                decoration: InputDecoration(labelText: 'Course Tags (comma separated)'),
+                decoration: const InputDecoration(labelText: 'Course Tags (comma separated)'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter at least one tag';
@@ -129,22 +132,22 @@ class _CoursemakerHomeState extends State<CoursemakerHome> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (_image != null)
                 Container(
                   height: 200,
                   width: double.infinity,
                   child: Image.file(_image!, fit: BoxFit.cover),
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: getImage,
-                child: Text('Upload Image'),
+                child: const Text('Upload Image'),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitCourse,
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             ],
           ),

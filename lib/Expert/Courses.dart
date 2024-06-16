@@ -8,7 +8,7 @@ class CoursesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Courses Page'),
+        title: const Text('Courses Page'),
         backgroundColor: hexStringToColor("696E79"),
          foregroundColor: Colors.white,
       ),
@@ -19,7 +19,7 @@ class CoursesPage extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('Courses').snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
@@ -30,7 +30,7 @@ class CoursesPage extends StatelessWidget {
                       },
                       child: Card(
                         elevation: 4,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -44,15 +44,15 @@ class CoursesPage extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(doc['courseName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                                    SizedBox(height: 8),
+                                    Text(doc['courseName'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                                    const SizedBox(height: 8),
                                     if (doc['Image'] != null) // Check if imageUrl field exists
                                       Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
-                                    SizedBox(height: 8),
-                                    Text(doc['courseDescription'], style: TextStyle(fontSize: 16, color: Colors.white)),
-                                    SizedBox(height: 8),
-                                    Text(doc['courseID'], style: TextStyle(fontSize: 14, color: Colors.white)),
-                                    SizedBox(height: 8),
+                                    const SizedBox(height: 8),
+                                    Text(doc['courseDescription'], style: const TextStyle(fontSize: 16, color: Colors.white)),
+                                    const SizedBox(height: 8),
+                                    Text(doc['courseID'], style: const TextStyle(fontSize: 14, color: Colors.white)),
+                                    const SizedBox(height: 8),
                                     Wrap(
                                       children: List<Widget>.from(doc['courseTags'].map((tag) => Chip(label: Text(tag,)))),
                                     ),
@@ -84,7 +84,7 @@ class CoursesPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Create a new course'),
+              child: const Text('Create a new course'),
             ),
           ),
         ],

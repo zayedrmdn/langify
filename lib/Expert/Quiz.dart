@@ -9,7 +9,7 @@ class QuizPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Page'),
+        title: const Text('Quiz Page'),
          backgroundColor: hexStringToColor("696E79"),
          foregroundColor: Colors.white,
       ),
@@ -20,7 +20,7 @@ class QuizPage extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('Quiz').snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
@@ -32,7 +32,7 @@ class QuizPage extends StatelessWidget {
                       },
                       child: Card(
                         elevation: 4,
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -46,13 +46,13 @@ class QuizPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(doc['quizName'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                                  SizedBox(height: 8),
+                                  Text(doc['quizName'], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                                  const SizedBox(height: 8),
                                    if (doc['Image'] != null) // Check if imageUrl field exists
                               Image.network(doc['Image'], fit: BoxFit.cover), // Display the image
-                                  SizedBox(height: 8),
-                                  Text(doc['quizDescription'], style: TextStyle(fontSize: 16, color: Colors.white)),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
+                                  Text(doc['quizDescription'], style: const TextStyle(fontSize: 16, color: Colors.white)),
+                                  const SizedBox(height: 8),
                                Wrap(
                                      spacing: 8.0, // Gap between adjacent chips.
                                      runSpacing: 4.0, // Gap between lines.
@@ -62,8 +62,8 @@ class QuizPage extends StatelessWidget {
                                     ))
                                  .toList(),
                                  ),
-                                  SizedBox(height: 8),
-                                  Text(doc['quizID'], style: TextStyle(fontSize: 14, color: Colors.white)),
+                                  const SizedBox(height: 8),
+                                  Text(doc['quizID'], style: const TextStyle(fontSize: 14, color: Colors.white)),
                                 ],
                               ),  
                               )
@@ -92,7 +92,7 @@ class QuizPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('Create a new quiz'),
+              child: const Text('Create a new quiz'),
             ),
           ),
         ],

@@ -123,21 +123,21 @@ int _addQuestionPressCount = 0;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quiz Maker'),
+        title: const Text('Quiz Maker'),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: <Widget>[
-              Text(
+              const Text(
                 'Note: The first answer will always be marked as correct',
                 style: TextStyle(color: Colors.red),
               ),
               TextFormField(
                 controller: questionController,
-                decoration: InputDecoration(labelText: 'Enter your question'),
+                decoration: const InputDecoration(labelText: 'Enter your question'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a question';
@@ -147,7 +147,7 @@ int _addQuestionPressCount = 0;
               ),
               TextFormField(
                 controller: answer1Controller,
-                decoration: InputDecoration(labelText: 'Answer 1 (Correct Answer)'),
+                decoration: const InputDecoration(labelText: 'Answer 1 (Correct Answer)'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter answer 1';
@@ -157,7 +157,7 @@ int _addQuestionPressCount = 0;
               ),
               TextFormField(
                 controller: answer2Controller,
-                decoration: InputDecoration(labelText: 'Answer 2'),
+                decoration: const InputDecoration(labelText: 'Answer 2'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter answer 2';
@@ -167,7 +167,7 @@ int _addQuestionPressCount = 0;
               ),
               TextFormField(
                 controller: answer3Controller,
-                decoration: InputDecoration(labelText: 'Answer 3'),
+                decoration: const InputDecoration(labelText: 'Answer 3'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter answer 3';
@@ -177,7 +177,7 @@ int _addQuestionPressCount = 0;
               ),
                TextFormField(
                 controller: scoreController,
-                decoration: InputDecoration(labelText: 'Score for this question'), // Step 4: Score input field
+                decoration: const InputDecoration(labelText: 'Score for this question'), // Step 4: Score input field
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a score';
@@ -192,14 +192,14 @@ int _addQuestionPressCount = 0;
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ElevatedButton(
                   onPressed: _addQuestion,
-                  child: Text('Confirm And Add Another Question'),
+                  child: const Text('Confirm And Add Another Question'),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ElevatedButton(
                   onPressed: _submitQuiz,
-                  child: Text('Submit All Questions'),
+                  child: const Text('Submit All Questions'),
                 ),
               ),
             ],

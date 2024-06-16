@@ -12,7 +12,7 @@ class ExpertProfilePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expert Profile'),
+        title: const Text('Expert Profile'),
       ),
       body: Center(
         child: Column(
@@ -25,7 +25,7 @@ class ExpertProfilePage extends StatelessWidget {
             SizedBox(height: 20),
             Text(
               username,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -33,7 +33,7 @@ class ExpertProfilePage extends StatelessWidget {
             SizedBox(height: 10),
             Text(
               email,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18.0,
                 color: Colors.grey,
               ),
