@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'UserDetailScreen.dart';
+
 
 class ExpertsScreen extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class ExpertsScreen extends StatefulWidget {
 }
 
 class _ExpertsScreenState extends State<ExpertsScreen> {
-  final CollectionReference expertsCollection = FirebaseFirestore.instance.collection('experts');
+  final CollectionReference expertsCollection = FirebaseFirestore.instance.collection('Expert');
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +33,15 @@ class _ExpertsScreenState extends State<ExpertsScreen> {
             itemBuilder: (context, index) {
               var expert = experts[index];
               return ListTile(
-                title: Text(expert['name'], style: TextStyle(color: Color(0xFF191E29))),
+                title: Text(expert['Name'], style: TextStyle(color: Color(0xFF191E29))),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => UserDetailScreen(
-                        name: expert['name'],
+                        name: expert['Name'],
                         role: 'Expert',
-                        subscribed: expert['subscribed'],
+                        subscribed: expert['Status'],
                         backgroundColor: Color(0xFF191E29),
                       ),
                     ),
@@ -51,20 +53,20 @@ class _ExpertsScreenState extends State<ExpertsScreen> {
                     TextButton(
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: expert['subscribed'] ? Color(0xFF696E79) : Color(0xFF01C38D),
+                        backgroundColor: expert['Status'] ? Color(0xFF696E79) : Color(0xFF01C38D),
                       ),
-                      child: Text(expert['subscribed'] ? 'Unsubscribe' : 'Subscribe'),
+                      child: Text(expert['Status'] ? 'Unsubscribe' : 'Subscribe'),
                       onPressed: () {
-                        expertsCollection.doc(expert.id).update({'subscribed': !expert['subscribed']});
+                        expertsCollection.doc(expert.id).update({'Status': !expert['Status']});
                       },
                     ),
                     TextButton.icon(
                       icon: Icon(Icons.edit, color: Color(0xFF132D46)),
                       label: Text('Edit', style: TextStyle(color: Color(0xFF132D46))),
                       onPressed: () async {
-                        String? editedName = await _editNameDialog(context, expert['name']);
+                        String? editedName = await _editNameDialog(context, expert['Name']);
                         if (editedName != null && editedName.isNotEmpty) {
-                          expertsCollection.doc(expert.id).update({'name': editedName});
+                          expertsCollection.doc(expert.id).update({'Name': editedName});
                         }
                       },
                     ),
