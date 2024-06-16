@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'User Role Management',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -40,7 +40,7 @@ class UserListPage extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         children: [
           GestureDetector(
-            onTap: () => _navigateToUserProfiles(context, 'Admins'),
+            onTap: () => _navigateToUserProfiles(context, 'Admin'),
             child: UserCategoryCard(
               icon: Icons.admin_panel_settings,
               title: 'Admins',
@@ -49,7 +49,7 @@ class UserListPage extends StatelessWidget {
           ),
           SizedBox(height: 16.0),
           GestureDetector(
-            onTap: () => _navigateToUserProfiles(context, 'Learners'),
+            onTap: () => _navigateToUserProfiles(context, 'Learner'),
             child: UserCategoryCard(
               icon: Icons.school,
               title: 'Learners',
@@ -58,7 +58,7 @@ class UserListPage extends StatelessWidget {
           ),
           SizedBox(height: 16.0),
           GestureDetector(
-            onTap: () => _navigateToUserProfiles(context, 'Experts'),
+            onTap: () => _navigateToUserProfiles(context, 'Expert'),
             child: UserCategoryCard(
               icon: Icons.person,
               title: 'Experts',
@@ -95,6 +95,13 @@ class UserProfileListPage extends StatelessWidget {
 
   UserProfileListPage({required this.userType});
 
+  void _addNewUser(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddUserPage(userType: userType)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +127,6 @@ class UserProfileListPage extends StatelessWidget {
                 child: ListTile(
                   leading: Icon(Icons.person, size: 40),
                   title: Text(userProfile['Name'], style: TextStyle(fontSize: 18)),
-                  subtitle: Text(userProfile['Role']),
                   trailing: TextButton(
                     onPressed: () {
                       Navigator.push(
@@ -129,7 +135,6 @@ class UserProfileListPage extends StatelessWidget {
                           builder: (context) => EditUserProfilePage(
                             documentId: userProfile.id,
                             initialName: userProfile['Name'],
-                            initialRole: userProfile['Role'],
                             collection: userType,
                           ),
                         ),
@@ -150,6 +155,89 @@ class UserProfileListPage extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _addNewUser(context),
+        child: Icon(Icons.add),
+        backgroundColor: Color(0xFF01C38D),
+      ),
+    );
+  }
+}
+
+class AddUserPage extends StatefulWidget {
+  final String userType;
+
+  AddUserPage({required this.userType});
+
+  @override
+  _AddUserPageState createState() => _AddUserPageState();
+}
+
+class _AddUserPageState extends State<AddUserPage> {
+  late TextEditingController _nameController;
+  bool _status = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _saveNewUser() async {
+    var collection = FirebaseFirestore.instance.collection(widget.userType);
+
+    var newUser = {
+      'Name': _nameController.text,
+      'Status': _status,
+    };
+
+    await collection.add(newUser);
+
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Add New ${widget.userType}', style: TextStyle(color: Color(0xFF191E29))),
+        backgroundColor: Color(0xFF01C38D),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Name'),
+            ),
+            SwitchListTile(
+              title: Text('Subscribed'),
+              value: _status,
+              onChanged: (bool value) {
+                setState(() {
+                  _status = value;
+                });
+              },
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton.icon(
+              onPressed: _saveNewUser,
+              icon: Icon(Icons.save),
+              label: Text('Save'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white, backgroundColor: Color(0xFF01C38D),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -157,13 +245,11 @@ class UserProfileListPage extends StatelessWidget {
 class EditUserProfilePage extends StatefulWidget {
   final String documentId;
   final String initialName;
-  final String initialRole;
   final String collection;
 
   EditUserProfilePage({
     required this.documentId,
     required this.initialName,
-    required this.initialRole,
     required this.collection,
   });
 
@@ -173,32 +259,56 @@ class EditUserProfilePage extends StatefulWidget {
 
 class _EditUserProfilePageState extends State<EditUserProfilePage> {
   late TextEditingController _nameController;
-  late TextEditingController _roleController;
+  late String _currentRole;
+  bool _status = false;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName);
-    _roleController = TextEditingController(text: widget.initialRole);
+    _currentRole = widget.collection;
+
+    _fetchUserStatus();
+  }
+
+  void _fetchUserStatus() async {
+    var userDoc = await FirebaseFirestore.instance.collection(widget.collection).doc(widget.documentId).get();
+    setState(() {
+      _status = userDoc['Status'];
+    });
   }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _roleController.dispose();
     super.dispose();
   }
 
-  void _saveProfile() {
-    FirebaseFirestore.instance
-        .collection(widget.collection)
+  void _saveProfile() async {
+    if (_currentRole != widget.collection) {
+      await _updateUserRole(_currentRole);
+    }
+
+    await FirebaseFirestore.instance
+        .collection(_currentRole)
         .doc(widget.documentId)
         .update({
       'Name': _nameController.text,
-      'Role': _roleController.text,
-    }).then((_) {
-      Navigator.pop(context);
+      'Status': _status,
     });
+
+    Navigator.pop(context);
+  }
+
+  Future<void> _updateUserRole(String newRole) async {
+    var currentDoc = FirebaseFirestore.instance.collection(widget.collection).doc(widget.documentId);
+    var newDoc = FirebaseFirestore.instance.collection(newRole).doc(widget.documentId);
+
+    var data = (await currentDoc.get()).data();
+    if (data != null) {
+      await newDoc.set(data);
+      await currentDoc.delete();
+    }
   }
 
   @override
@@ -216,10 +326,15 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Name'),
             ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _roleController,
-              decoration: InputDecoration(labelText: 'Role'),
+            SwitchListTile(
+             
+              title: Text('Subscribed'),
+              value: _status,
+              onChanged: (bool value) {
+                setState(() {
+                  _status = value;
+                });
+              },
             ),
             SizedBox(height: 16.0),
             ElevatedButton.icon(
@@ -227,8 +342,26 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
               icon: Icon(Icons.save),
               label: Text('Save'),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Color(0xFF01C38D),
+                foregroundColor: Colors.white,
+                backgroundColor: Color(0xFF01C38D),
               ),
+            ),
+            SizedBox(height: 16.0),
+            DropdownButton<String>(
+              value: _currentRole,
+              items: <String>['Admin', 'Learner', 'Expert'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    _currentRole = newValue;
+                  });
+                }
+              },
             ),
           ],
         ),
