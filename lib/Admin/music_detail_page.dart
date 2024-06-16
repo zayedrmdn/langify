@@ -17,7 +17,7 @@ class MusicDetailPage extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              'assets/music.jpg', // Use a single image for all music items
+              'assets/images/music.jpg', // Use a single image for all music items
               fit: BoxFit.cover, // Align the image to the screen
             ),
             SizedBox(height: 16),

@@ -30,3 +30,4 @@ class LessonDetailPage extends StatelessWidget {
     );
   }
 }
+

@@ -17,7 +17,7 @@ class VideoDetailPage extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              'assets/video.jpg', // Use a single image for all video items
+              'assets/images/video.jpg', // Use a single image for all video items
               fit: BoxFit.cover, // Align the image to the screen
             ),
             SizedBox(height: 16),
@@ -28,4 +28,3 @@ class VideoDetailPage extends StatelessWidget {
     );
   }
 }
-

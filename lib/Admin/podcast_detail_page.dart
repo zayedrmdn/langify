@@ -17,7 +17,7 @@ class PodcastDetailPage extends StatelessWidget {
         child: Column(
           children: [
             Image.asset(
-              'assets/podcast.jpg', // Use a single image for all podcast items
+              'assets/images/podcast.jpg', // Use a single image for all podcast items
               fit: BoxFit.cover, // Align the image to the screen
             ),
             SizedBox(height: 16),
@@ -28,4 +28,3 @@ class PodcastDetailPage extends StatelessWidget {
     );
   }
 }
-
