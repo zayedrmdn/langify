@@ -115,7 +115,7 @@ class MainMenu extends StatelessWidget {
             ),
             FeatureButton(
               icon: Icons.edit,
-              title: 'Edit User',
+              title: 'Edit/Add User',
               color: Color(0xFF132D46),
               onTap: () => _navigateToPage(context, UserListPage()),
             ),
