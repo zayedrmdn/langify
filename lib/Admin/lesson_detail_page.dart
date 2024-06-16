@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class LessonDetailPage extends StatelessWidget {
   final String title;
   final String description;
+  final VoidCallback onRemove;
 
-  const LessonDetailPage({required this.title, required this.description});
+  const LessonDetailPage({
+    required this.title,
+    required this.description,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +29,21 @@ class LessonDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(description),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                onRemove();
+                Navigator.pop(context);
+              },
+              child: Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+

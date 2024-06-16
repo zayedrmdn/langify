@@ -1,30 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Quiz App'),
-        ),
-        body: const Center(
-          child: FirestoreDataDisplay(),
-        ),
-      ),
-    );
-  }
-}
 
 class FirestoreDataDisplay extends StatefulWidget {
   const FirestoreDataDisplay({super.key});
@@ -38,6 +13,8 @@ class _FirestoreDataDisplayState extends State<FirestoreDataDisplay> {
   int currentQuestionIndex = 0;
   int? selectedAnswerIndex;
   bool showCorrectMessage = false;
+  int correctAnswers = 0;
+  int wrongAnswers = 0;
 
   @override
   void initState() {
@@ -75,15 +52,60 @@ class _FirestoreDataDisplayState extends State<FirestoreDataDisplay> {
       selectedAnswerIndex = index;
       showCorrectMessage = questions[currentQuestionIndex]['CorrectAns'] ==
           questions[currentQuestionIndex]['Options'].keys.elementAt(index);
+
+      if (showCorrectMessage) {
+        correctAnswers++;
+      } else {
+        wrongAnswers++;
+      }
     });
   }
 
   void nextQuestion() {
-    setState(() {
-      currentQuestionIndex++;
-      selectedAnswerIndex = null;
-      showCorrectMessage = false;
-    });
+    if (currentQuestionIndex < questions.length - 1) {
+      setState(() {
+        currentQuestionIndex++;
+        selectedAnswerIndex = null;
+        showCorrectMessage = false;
+      });
+    } else {
+      // Optionally, show a summary or reset the quiz
+      showSummary();
+    }
+  }
+
+  void showSummary() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Quiz Summary'),
+          content: Text(
+              'Correct Answers: $correctAnswers\nWrong Answers: $wrongAnswers'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Restart'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  currentQuestionIndex = 0;
+                  correctAnswers = 0;
+                  wrongAnswers = 0;
+                  selectedAnswerIndex = null;
+                  showCorrectMessage = false;
+                });
+              },
+            ),
+            TextButton(
+              child: const Text('Exit'),
+              onPressed: () {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -94,44 +116,58 @@ class _FirestoreDataDisplayState extends State<FirestoreDataDisplay> {
 
     Map<String, dynamic> currentQuestion = questions[currentQuestionIndex];
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          'Question: ${currentQuestion['Question']}',
-          style: const TextStyle(fontSize: 20),
-        ),
-        const SizedBox(height: 20),
-        Column(
-          children: List.generate(
-            currentQuestion['Options'].length,
-            (index) => RadioListTile<int>(
-              title: Text(currentQuestion['Options'].values.elementAt(index)),
-              value: index,
-              groupValue: selectedAnswerIndex,
-              onChanged: selectedAnswerIndex == null
-                  ? (value) => handleAnswer(value!)
-                  : null,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        if (selectedAnswerIndex != null)
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Quiz'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
           Text(
-            showCorrectMessage ? 'You are correct!' : 'Try again!',
-            style: TextStyle(
-              fontSize: 18,
-              color: showCorrectMessage ? Colors.green : Colors.red,
+            'Question: ${currentQuestion['Question']}',
+            style: const TextStyle(fontSize: 20),
+          ),
+          const SizedBox(height: 20),
+          Column(
+            children: List.generate(
+              currentQuestion['Options'].length,
+              (index) => RadioListTile<int>(
+                title: Text(currentQuestion['Options'].values.elementAt(index)),
+                value: index,
+                groupValue: selectedAnswerIndex,
+                onChanged: selectedAnswerIndex == null
+                    ? (value) => handleAnswer(value!)
+                    : null,
+              ),
             ),
           ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: nextQuestion,
-          child: Text(currentQuestionIndex < questions.length - 1
-              ? 'Next Question'
-              : 'Finish'),
-        ),
-      ],
+          const SizedBox(height: 20),
+          if (selectedAnswerIndex != null)
+            Text(
+              showCorrectMessage ? 'You are correct!' : 'You are incorrect!',
+              style: TextStyle(
+                fontSize: 18,
+                color: showCorrectMessage ? Colors.green : Colors.red,
+              ),
+            ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: nextQuestion,
+            child: Text(currentQuestionIndex < questions.length - 1
+                ? 'Next Question'
+                : 'Finish'),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Correct Answers: $correctAnswers',
+            style: const TextStyle(fontSize: 16, color: Colors.green),
+          ),
+          Text(
+            'Wrong Answers: $wrongAnswers',
+            style: const TextStyle(fontSize: 16, color: Colors.red),
+          ),
+        ],
+      ),
     );
   }
 }

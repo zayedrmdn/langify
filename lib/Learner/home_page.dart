@@ -4,6 +4,7 @@ import 'package:langify/Learner/home_tab.dart';
 import 'profile_page.dart';
 import 'puzzle_page.dart';
 import 'leaderboard_page.dart';
+import 'puzzle_start.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 2;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    FirestoreDataDisplay(),
+    PuzzleStart(),
     LeaderboardPage(),
     HomeTab(),
     ForumsPage(),
