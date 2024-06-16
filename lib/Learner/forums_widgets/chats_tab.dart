@@ -5,7 +5,7 @@ import 'messages_page.dart';
 class ChatsTab extends StatelessWidget {
   final String currentUserID;
 
-  const ChatsTab({required this.currentUserID, super.key});
+  const ChatsTab({required this.currentUserID, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,21 +57,36 @@ class ChatsTab extends StatelessWidget {
                       as Map<String, dynamic>; // Cast to Map<String, dynamic>
                   final username =
                       user['username'] as String? ?? 'Unknown user';
+                  final profileImageUrl = user['profileImageUrl']
+                      as String?; // Assuming profile image URL is stored in 'profileImageUrl' field
 
-                  return ListTile(
-                    title: Text(username),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MessagesPage(
-                            chatID: chat.id,
-                            currentUserID: currentUserID,
-                            otherUserID: otherUserID,
+                  return Card(
+                    elevation: 2,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: profileImageUrl != null
+                            ? NetworkImage(profileImageUrl)
+                            : null,
+                        child: profileImageUrl == null
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
+                      title: Text(username),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MessagesPage(
+                              chatID: chat.id,
+                              currentUserID: currentUserID,
+                              otherUserID: otherUserID,
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 },
               );
