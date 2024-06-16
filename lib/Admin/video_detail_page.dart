@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class VideoDetailPage extends StatelessWidget {
   final String video;
+  final VoidCallback onRemove;
 
-  const VideoDetailPage({required this.video});
+  const VideoDetailPage({
+    required this.video,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,17 @@ class VideoDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text('Details for $video'),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                onRemove();
+                Navigator.pop(context);
+              },
+              child: Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+            ),
           ],
         ),
       ),

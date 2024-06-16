@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class MusicDetailPage extends StatelessWidget {
   final String song;
+  final VoidCallback onRemove;
 
-  const MusicDetailPage({required this.song});
+  const MusicDetailPage({
+    required this.song,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,17 @@ class MusicDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text('Details for $song'),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                onRemove();
+                Navigator.pop(context);
+              },
+              child: Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+            ),
           ],
         ),
       ),

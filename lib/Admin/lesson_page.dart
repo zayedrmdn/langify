@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'lesson_detail_page.dart';
 
-class LessonPage extends StatelessWidget {
-  final List<Map<String, String>> lessons = [
+class LessonPage extends StatefulWidget {
+  @override
+  _LessonPageState createState() => _LessonPageState();
+}
+
+class _LessonPageState extends State<LessonPage> {
+  List<Map<String, String>> lessons = [
     {'title': 'Lesson 1', 'description': 'Description for Lesson 1'},
     {'title': 'Lesson 2', 'description': 'Description for Lesson 2'},
     // Add more lessons here
   ];
+
+  void removeLesson(int index) {
+    setState(() {
+      lessons.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +34,7 @@ class LessonPage extends StatelessWidget {
             return LessonItem(
               title: lessons[index]['title']!,
               description: lessons[index]['description']!,
+              onRemove: () => removeLesson(index),
             );
           },
         ),
@@ -34,10 +46,12 @@ class LessonPage extends StatelessWidget {
 class LessonItem extends StatelessWidget {
   final String title;
   final String description;
+  final VoidCallback onRemove;
 
   const LessonItem({
     required this.title,
     required this.description,
+    required this.onRemove,
   });
 
   @override
@@ -62,6 +76,7 @@ class LessonItem extends StatelessWidget {
               builder: (context) => LessonDetailPage(
                 title: title,
                 description: description,
+                onRemove: onRemove,
               ),
             ),
           );
@@ -70,3 +85,4 @@ class LessonItem extends StatelessWidget {
     );
   }
 }
+

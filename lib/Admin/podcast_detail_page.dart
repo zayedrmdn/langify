@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class PodcastDetailPage extends StatelessWidget {
   final String podcast;
+  final VoidCallback onRemove;
 
-  const PodcastDetailPage({required this.podcast});
+  const PodcastDetailPage({
+    required this.podcast,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +26,17 @@ class PodcastDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text('Details for $podcast'),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                onRemove();
+                Navigator.pop(context);
+              },
+              child: Text('Delete'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+            ),
           ],
         ),
       ),

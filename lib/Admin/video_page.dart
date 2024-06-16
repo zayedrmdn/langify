@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'video_detail_page.dart';
 
-class VideoPage extends StatelessWidget {
-  final List<String> videoList = [
+class VideoPage extends StatefulWidget {
+  @override
+  _VideoPageState createState() => _VideoPageState();
+}
+
+class _VideoPageState extends State<VideoPage> {
+  List<String> videoList = [
     'Video 1',
     'Video 2',
     'Video 3',
@@ -14,6 +19,12 @@ class VideoPage extends StatelessWidget {
     'Video 9',
     'Video 10',
   ];
+
+  void removeVideo(int index) {
+    setState(() {
+      videoList.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +44,10 @@ class VideoPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => VideoDetailPage(video: videoList[index]),
+                    builder: (context) => VideoDetailPage(
+                      video: videoList[index],
+                      onRemove: () => removeVideo(index),
+                    ),
                   ),
                 );
               },
@@ -44,3 +58,4 @@ class VideoPage extends StatelessWidget {
     );
   }
 }
+

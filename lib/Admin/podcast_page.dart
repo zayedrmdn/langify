@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'podcast_detail_page.dart';
 
-class PodcastPage extends StatelessWidget {
-  final List<String> podcasts = [
+class PodcastPage extends StatefulWidget {
+  @override
+  _PodcastPageState createState() => _PodcastPageState();
+}
+
+class _PodcastPageState extends State<PodcastPage> {
+  List<String> podcasts = [
     'Podcast 1',
     'Podcast 2',
     'Podcast 3',
     'Podcast 4',
     'Podcast 5',
   ];
+
+  void removePodcast(int index) {
+    setState(() {
+      podcasts.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +39,10 @@ class PodcastPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PodcastDetailPage(podcast: podcasts[index]),
+                    builder: (context) => PodcastDetailPage(
+                      podcast: podcasts[index],
+                      onRemove: () => removePodcast(index),
+                    ),
                   ),
                 );
               },
@@ -39,4 +53,5 @@ class PodcastPage extends StatelessWidget {
     );
   }
 }
+
 

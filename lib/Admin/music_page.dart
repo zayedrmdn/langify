@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
 import 'music_detail_page.dart';
 
-class MusicPage extends StatelessWidget {
-  final List<String> songs = [
+class MusicPage extends StatefulWidget {
+  @override
+  _MusicPageState createState() => _MusicPageState();
+}
+
+class _MusicPageState extends State<MusicPage> {
+  List<String> songs = [
     'Song 1',
     'Song 2',
     'Song 3',
     'Song 4',
     'Song 5',
   ];
+
+  void removeSong(int index) {
+    setState(() {
+      songs.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +39,10 @@ class MusicPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MusicDetailPage(song: songs[index]),
+                    builder: (context) => MusicDetailPage(
+                      song: songs[index],
+                      onRemove: () => removeSong(index),
+                    ),
                   ),
                 );
               },
