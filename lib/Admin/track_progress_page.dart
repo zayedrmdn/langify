@@ -1,41 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TrackProgressPage extends StatefulWidget {
-  @override
-  _TrackProgressPageState createState() => _TrackProgressPageState();
-}
-
-class _TrackProgressPageState extends State<TrackProgressPage> {
-  final CollectionReference progressCollection = FirebaseFirestore.instance.collection('progress');
-
+class TrackProgressPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Track Progress', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF132D46),
+        title: Text('Track Progress', style: TextStyle(color: Color(0xFF191E29))),
+        backgroundColor: Color(0xFF01C38D),
       ),
-      body: StreamBuilder(
-        stream: progressCollection.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            ProgressDiagram(
+              title: 'Learner Progress Over Time',
+              description: 'This diagram shows the progress of learners over months.',
+              imagePath: 'assets/images/Digram.jpg',
+            ),
+            SizedBox(height: 16.0),
+            ProgressDiagram(
+              title: 'Course Completion Rates',
+              description: 'This diagram displays the completion rates of various languages.',
+              imagePath: 'assets/images/cRate.jpg', 
+            ),
+            SizedBox(height: 16.0),
+            ProgressDiagram(
+              title: 'Quiz Performance',
+              description: 'This diagram illustrates the performance of learners in quizzes.',
+              imagePath: 'assets/images/Quiz.jpg', 
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
-          var progressData = snapshot.data!.docs;
+class ProgressDiagram extends StatelessWidget {
+  final String title;
+  final String description;
+  final String imagePath;
 
-          return ListView.builder(
-            itemCount: progressData.length,
-            itemBuilder: (context, index) {
-              var progress = progressData[index];
-              return ListTile(
-                title: Text(progress['user'], style: TextStyle(color: Color(0xFF191E29))),
-                subtitle: Text('Progress: ${progress['percentage']}%', style: TextStyle(color: Color(0xFF191E29))),
-              );
-            },
-          );
-        },
+  ProgressDiagram({required this.title, required this.description, required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 8.0),
+            AspectRatio(
+              aspectRatio: 16/8 , 
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.contain, 
+              ),
+            ),
+            SizedBox(height: 8.0),
+            Text(description),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'video_detail_page.dart';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -7,36 +7,55 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-  final CollectionReference videosCollection = FirebaseFirestore.instance.collection('videos');
+  List<String> videoList = [
+    'Video 1',
+    'Video 2',
+    'Video 3',
+    'Video 4',
+    'Video 5',
+    'Video 6',
+    'Video 7',
+    'Video 8',
+    'Video 9',
+    'Video 10',
+  ];
+
+  void removeVideo(int index) {
+    setState(() {
+      videoList.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Video', style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xFF132D46),
+        title: Text('Video Content', style: TextStyle(color: Color(0xFF191E29))),
+        backgroundColor: Color(0xFF01C38D),
       ),
-      body: StreamBuilder(
-        stream: videosCollection.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          var videos = snapshot.data!.docs;
-
-          return ListView.builder(
-            itemCount: videos.length,
-            itemBuilder: (context, index) {
-              var video = videos[index];
-              return ListTile(
-                title: Text(video['title'], style: TextStyle(color: Color(0xFF191E29))),
-                subtitle: Text('URL: ${video['url']}', style: TextStyle(color: Color(0xFF191E29))),
-              );
-            },
-          );
-        },
+      body: Container(
+        color: Color(0xFF132D46),
+        child: ListView.builder(
+          itemCount: videoList.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(videoList[index], style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoDetailPage(
+                      video: videoList[index],
+                      onRemove: () => removeVideo(index),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
 }
+

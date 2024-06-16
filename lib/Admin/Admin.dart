@@ -12,7 +12,7 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
   final CollectionReference accountsCollection =
-      FirebaseFirestore.instance.collection('Accounts');
+      FirebaseFirestore.instance.collection('Admin');
 
   @override
   Widget build(BuildContext context) {
